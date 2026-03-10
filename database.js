@@ -201,17 +201,17 @@ const tradeOps = {
 
   /** Find open trade by symbol */
   getOpenTrade(symbol) {
-    return db.prepare('SELECT * FROM trades WHERE symbol = ? AND status = "open" ORDER BY id DESC LIMIT 1').get(symbol);
+    return db.prepare("SELECT * FROM trades WHERE symbol = ? AND status = 'open' ORDER BY id DESC LIMIT 1").get(symbol);
   },
 
   /** Get all open trades */
   getOpenTrades() {
-    return db.prepare('SELECT * FROM trades WHERE status = "open" ORDER BY entry_date DESC').all();
+    return db.prepare("SELECT * FROM trades WHERE status = 'open' ORDER BY entry_date DESC").all();
   },
 
   /** Get recent closed trades */
   getRecentTrades(limit = 20) {
-    return db.prepare('SELECT * FROM trades WHERE status = "closed" ORDER BY exit_date DESC LIMIT ?').all(limit);
+    return db.prepare("SELECT * FROM trades WHERE status = 'closed' ORDER BY exit_date DESC LIMIT ?").all(limit);
   },
 
   /** Get trades for a date range */
@@ -263,7 +263,7 @@ const positionOps = {
 
   /** Get all saved positions */
   getAll() {
-    return db.prepare('SELECT * FROM positions WHERE status != "closed" ORDER BY entry_date').all();
+    return db.prepare("SELECT * FROM positions WHERE status != 'closed' ORDER BY entry_date").all();
   },
 };
 
@@ -364,7 +364,7 @@ const riskOps = {
 const metrics = {
   /** Calculate overall performance stats */
   getStats() {
-    const closedTrades = db.prepare('SELECT * FROM trades WHERE status = "closed"').all();
+    const closedTrades = db.prepare("SELECT * FROM trades WHERE status = 'closed'").all();
 
     if (closedTrades.length === 0) {
       return { totalTrades: 0, message: 'No closed trades yet' };
@@ -411,7 +411,7 @@ const metrics = {
   getWeeklyStats() {
     const monday = getMonday(new Date()).toISOString().split('T')[0];
     const trades = db.prepare(
-      'SELECT * FROM trades WHERE status = "closed" AND exit_date >= ?'
+      "SELECT * FROM trades WHERE status = 'closed' AND exit_date >= ?"
     ).all(monday);
 
     const wins = trades.filter(t => t.pnl > 0).length;
